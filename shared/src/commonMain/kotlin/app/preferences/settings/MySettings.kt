@@ -18,6 +18,7 @@ import app.preferences.Preferences.CLEAR_LOGS
 import app.preferences.Preferences.CC_LANG
 import app.preferences.Preferences.COLOR_ERRORMSG
 import app.preferences.Preferences.COLOR_FRIENDTAG
+import app.preferences.Preferences.COLOR_HASH_USERNAMES
 import app.preferences.Preferences.COLOR_SELFTAG
 import app.preferences.Preferences.COLOR_SYSTEMMSG
 import app.preferences.Preferences.COLOR_TIMESTAMP
@@ -171,7 +172,7 @@ val INROOM_CHATCOLORS = SettingCategory(
     title = Res.string.uisetting_categ_chat_colors,
     icon = Icons.Filled.Palette,
 ) {
-    +COLOR_TIMESTAMP; +COLOR_SELFTAG; +COLOR_FRIENDTAG; +COLOR_SYSTEMMSG; +COLOR_USERMSG; +COLOR_ERRORMSG
+    +COLOR_TIMESTAMP; +COLOR_HASH_USERNAMES; +COLOR_SELFTAG; +COLOR_FRIENDTAG; +COLOR_SYSTEMMSG; +COLOR_USERMSG; +COLOR_ERRORMSG
 }
 
 val INROOM_CHAT_PROPERTIES = SettingCategory(

@@ -157,6 +157,8 @@ import syncplaymobile.shared.generated.resources.uisetting_error_color_summary
 import syncplaymobile.shared.generated.resources.uisetting_error_color_title
 import syncplaymobile.shared.generated.resources.uisetting_friend_color_summary
 import syncplaymobile.shared.generated.resources.uisetting_friend_color_title
+import syncplaymobile.shared.generated.resources.uisetting_hash_username_colors_summary
+import syncplaymobile.shared.generated.resources.uisetting_hash_username_colors_title
 import syncplaymobile.shared.generated.resources.uisetting_haptic_on_chat_summary
 import syncplaymobile.shared.generated.resources.uisetting_haptic_on_chat_title
 import syncplaymobile.shared.generated.resources.uisetting_hud_autohide_summary
@@ -540,6 +542,11 @@ object Preferences {
         summary = Res.string.uisetting_friend_color_summary
         icon = Icons.Filled.Brush
         extraConfig = PrefExtraConfig.ColorPick
+    }
+    val COLOR_HASH_USERNAMES = Pref("pref_inroom_color_hash_usernames", true) {
+        title = Res.string.uisetting_hash_username_colors_title
+        summary = Res.string.uisetting_hash_username_colors_summary
+        icon = Icons.Filled.Brush
     }
     val COLOR_SYSTEMMSG = Pref("pref_inroom_color_systemmsg", Theming.MSG_SYSTEM.toArgb()) {
         title = Res.string.uisetting_system_color_title

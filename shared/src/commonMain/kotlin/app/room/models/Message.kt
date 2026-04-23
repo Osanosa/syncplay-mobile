@@ -53,8 +53,8 @@ data class Message(
                 AnnotatedString(
                     text = "$sender:",
                     spanStyle = SpanStyle(
-                        color = if (isMainUser) msgPalette.selftagColor else msgPalette.friendtagColor,
-                        fontWeight = FontWeight.Companion.SemiBold
+                        color = msgPalette.usernameTagColor(sender, isMainUser),
+                        fontWeight = FontWeight.SemiBold
                     )
                 )
             )
@@ -82,8 +82,8 @@ data class Message(
             val tag = AnnotatedString(
                 text = "$sender: ",
                 spanStyle = SpanStyle(
-                    color = if (isMainUser) msgPalette.selftagColor else msgPalette.friendtagColor,
-                    fontWeight = FontWeight.Companion.SemiBold
+                    color = msgPalette.usernameTagColor(sender, isMainUser),
+                    fontWeight = FontWeight.SemiBold
                 )
             )
             minibuilder.append(tag)
@@ -92,7 +92,7 @@ data class Message(
                 text = content,
                 spanStyle = SpanStyle(
                     color = msgPalette.usermsgColor,
-                    fontWeight = FontWeight.Companion.Medium
+                    fontWeight = FontWeight.Medium
                 )
             )
             minibuilder.append(chatTEXT)

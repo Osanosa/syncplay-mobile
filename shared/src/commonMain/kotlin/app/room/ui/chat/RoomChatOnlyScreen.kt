@@ -47,7 +47,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.LocalRoomViewmodel
@@ -57,6 +60,7 @@ import app.room.RoomViewmodel
 import app.room.models.Message
 import app.room.ui.statinfo.PingIndicator
 import app.uicomponents.AnimatedImage
+import app.uicomponents.messagePalette
 import app.utils.timeStamper
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -355,6 +359,7 @@ private fun ChatOnlyMessageBubble(
     showSenderInfo: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val palette by messagePalette
     val alignMine = message.sender != null && message.isMainUser
     val bubbleAlignment = when {
         message.sender == null -> Alignment.Center
@@ -394,8 +399,22 @@ private fun ChatOnlyMessageBubble(
             ) {
                 if (showSenderInfo) {
                     Text(
-                        text = "${message.sender} - ${message.timestamp}",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        text = buildAnnotatedString {
+                            val sender = message.sender.orEmpty()
+                            withStyle(
+                                SpanStyle(
+                                    color = palette.usernameTagColor(sender, message.isMainUser),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            ) {
+                                append(sender)
+                            }
+                            withStyle(
+                                SpanStyle(color = palette.timestampColor)
+                            ) {
+                                append(" - ${message.timestamp}")
+                            }
+                        },
                         fontSize = 11.sp
                     )
                 }

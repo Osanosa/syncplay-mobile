@@ -364,6 +364,8 @@
     <string name="uisetting_msglife_summary">When receiving a chat message or room message, it will begin fading out for the amount of time set below.</string>
     <string name="uisetting_timestamp_color_title">Timestamp Text Color</string>
     <string name="uisetting_timestamp_color_summary">Customize the text color of message timestamps (Default is Pink)</string>
+    <string name="uisetting_hash_username_colors_title">Unique username colors</string>
+    <string name="uisetting_hash_username_colors_summary">When enabled, each username gets a deterministic color based on its nickname. Disable this to return to the manual self/friend tag colors below.</string>
     <string name="uisetting_self_color_title">Self Tag Color</string>
     <string name="uisetting_self_color_summary">Customize the text color of your name tag (Default is Dark Red)</string>
     <string name="uisetting_friend_color_title">Friend Tag Text Color</string>
