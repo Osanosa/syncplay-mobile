@@ -17,21 +17,22 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import app.preferences.LocalPrefsState
-import app.preferences.datastoreStateFlow
-import app.uicomponents.messagePalette
-import app.utils.createWeakRef
 import app.home.HomeScreenUI
 import app.home.HomeViewmodel
+import app.preferences.LocalPrefsState
+import app.preferences.datastoreStateFlow
 import app.preferences.settings.SettingStyling
 import app.room.RoomScreenUI
 import app.room.RoomUiStateManager
 import app.room.RoomViewmodel
 import app.room.models.MessagePalette
+import app.room.ui.chat.ChatOnlyRoomScreen
 import app.server.ServerViewmodel
 import app.server.ui.ServerHostScreenUI
 import app.theme.SaveableTheme
 import app.theme.ThemeCreatorScreenUI
+import app.uicomponents.messagePalette
+import app.utils.createWeakRef
 
 /** Provides access to the global [SyncplayViewmodel] instance shared across the app. */
 val LocalGlobalViewmodel = compositionLocalOf<SyncplayViewmodel> { error("No Viewmodel provided yet") }
@@ -129,6 +130,26 @@ fun AdamScreen(onGlobalViewmodel: (SyncplayViewmodel) -> Unit) {
                             LocalRoomViewmodel provides viewmodel
                         ) {
                             RoomScreenUI(viewmodel)
+                        }
+                    }
+
+                    entry<Screen.ChatOnly> { room ->
+                        val viewmodel = viewModel(
+                            key = "chat_only_room_viewmodel",
+                            modelClass = RoomViewmodel::class,
+                            factory = viewModelFactory {
+                                initializer { RoomViewmodel(joinConfig = room.joinConfig, backStack = globalviewmodel.backstack) }
+                            }
+                        )
+
+                        LaunchedEffect(null) {
+                            globalviewmodel.roomWeakRef = createWeakRef(viewmodel)
+                        }
+
+                        CompositionLocalProvider(
+                            LocalRoomViewmodel provides viewmodel
+                        ) {
+                            ChatOnlyRoomScreen()
                         }
                     }
 

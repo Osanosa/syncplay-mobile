@@ -25,6 +25,13 @@ sealed interface Screen : NavKey {
     data class Room(val joinConfig: JoinConfig?) : Screen
 
     /**
+     * Dedicated chat-only room mode with the same room connection lifecycle,
+     * but without the standard horizontal room HUD.
+     */
+    @Serializable
+    data class ChatOnly(val joinConfig: JoinConfig?) : Screen
+
+    /**
      * The screen where user can customize screens
      *
      */

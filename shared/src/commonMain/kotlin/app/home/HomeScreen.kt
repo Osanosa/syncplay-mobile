@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Lan
 import androidx.compose.material.icons.outlined.MeetingRoom
 import androidx.compose.material.icons.outlined.PersonPin
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -83,6 +84,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import syncplaymobile.shared.generated.resources.Res
 import syncplaymobile.shared.generated.resources.connect_address_empty_error
+import syncplaymobile.shared.generated.resources.connect_button_chat_only
 import syncplaymobile.shared.generated.resources.connect_button_join
 import syncplaymobile.shared.generated.resources.connect_choose_video_engine
 import syncplaymobile.shared.generated.resources.connect_enter_custom_server
@@ -361,6 +363,31 @@ fun HomeScreenUI(viewmodel: HomeViewmodel) {
                     }
 
                     /* join button + shortcut saver */
+                    fun validatedJoinConfig(): JoinConfig? {
+                        val errorMessage: StringResource? = when {
+                            textUsername.isBlank() -> Res.string.connect_username_empty_error
+                            textRoomname.isBlank() -> Res.string.connect_roomname_empty_error
+                            serverAddress.isBlank() -> Res.string.connect_address_empty_error
+                            serverPort.isBlank() || serverPort.toIntOrNull() == null -> Res.string.connect_port_empty_error
+                            else -> null
+                        }
+
+                        if (errorMessage != null) {
+                            viewmodel.viewModelScope.launch {
+                                viewmodel.snackIt(getString(errorMessage))
+                            }
+                            return null
+                        }
+
+                        return JoinConfig(
+                            textUsername.replace("\\", "").trim().substringSafely(0, 149),
+                            textRoomname.replace("\\", "").trim().substringSafely(0, 34),
+                            serverAddress,
+                            serverPort.toInt(),
+                            serverPassword
+                        )
+                    }
+
                     SplitButtonLayout(
                         modifier = Modifier.fillMaxWidth(0.75f),
                         leadingButton = {
@@ -368,29 +395,9 @@ fun HomeScreenUI(viewmodel: HomeViewmodel) {
                                 contentPadding = PaddingValues(vertical = 16.dp),
                                 modifier = Modifier.fillMaxWidth(0.85f),
                                 onClick = {
-                                    globalViewmodel.viewModelScope.launch(Dispatchers.Default) {
-                                        val errorMessage: StringResource? = when {
-                                            textUsername.isBlank() -> Res.string.connect_username_empty_error
-                                            textRoomname.isBlank() -> Res.string.connect_roomname_empty_error
-                                            serverAddress.isBlank() -> Res.string.connect_address_empty_error
-                                            serverPort.isBlank() || serverPort.toIntOrNull() == null -> Res.string.connect_port_empty_error
-                                            else -> null
-                                        }
-
-                                        if (errorMessage != null) {
-                                            viewmodel.snackIt(getString(errorMessage))
-                                            return@launch
-                                        }
-
-                                        viewmodel.joinRoom(
-                                            JoinConfig(
-                                                textUsername.replace("\\", "").trim().substringSafely(0, 149),
-                                                textRoomname.replace("\\", "").trim().substringSafely(0, 34),
-                                                serverAddress,
-                                                serverPort.toInt(),
-                                                serverPassword
-                                            )
-                                        )
+                                    viewmodel.viewModelScope.launch(Dispatchers.Default) {
+                                        val joinConfig = validatedJoinConfig() ?: return@launch
+                                        viewmodel.joinRoom(joinConfig)
                                     }
                                 },
                                 content = {
@@ -423,6 +430,18 @@ fun HomeScreenUI(viewmodel: HomeViewmodel) {
                             )
                         }
                     )
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(0.75f),
+                        onClick = {
+                            viewmodel.viewModelScope.launch(Dispatchers.Default) {
+                                val joinConfig = validatedJoinConfig() ?: return@launch
+                                viewmodel.joinChatOnly(joinConfig)
+                            }
+                        }
+                    ) {
+                        Text(stringResource(Res.string.connect_button_chat_only), fontSize = 16.sp)
+                    }
 
                     Spacer(modifier = Modifier.height(10.dp))
                 }

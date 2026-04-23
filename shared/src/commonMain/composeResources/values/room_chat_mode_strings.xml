@@ -1,0 +1,8 @@
+<resources>
+    <string name="room_chat_mode_title">Chat Mode</string>
+    <string name="room_chat_mode_no_chat">This room does not support chat.</string>
+    <string name="room_chat_mode_seek_back_short">15s</string>
+    <string name="room_chat_mode_seek_back_long">60s</string>
+    <string name="room_chat_mode_seek_forward_short">15s</string>
+    <string name="room_chat_mode_seek_forward_long">60s</string>
+</resources>

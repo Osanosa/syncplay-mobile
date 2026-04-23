@@ -18,6 +18,8 @@ import kotlinx.coroutines.withContext
  */
 class HomeViewmodel(val backStack: SnapshotStateList<Screen>) : ViewModel() {
 
+    var snack = SnackbarHostState()
+
     /**
      * Joins a Syncplay room with the provided configuration.
      *
@@ -36,7 +38,18 @@ class HomeViewmodel(val backStack: SnapshotStateList<Screen>) : ViewModel() {
         }
     }
 
-    var snack = SnackbarHostState()
+    /**
+     * Joins a room directly into the dedicated chat-only mode.
+     */
+    suspend fun joinChatOnly(joinConfig: JoinConfig?) {
+        withContext(Dispatchers.IO) {
+            joinConfig?.save()
+        }
+
+        withContext(Dispatchers.Main) {
+            backStack.add(Screen.ChatOnly(joinConfig))
+        }
+    }
 
     fun snackItAsync(string: String, abruptly: Boolean = true) {
         viewModelScope.launch(Dispatchers.Main) {
